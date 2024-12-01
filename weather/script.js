@@ -1,38 +1,34 @@
-const API_KEY = "461c2e996a5f19383d64c90a698fac0e";
+//api.openweathermap.org/data/2.5/weather?q={city name}&appid={API key}&units=imperial
 
-const getWeatherData = async (city) => {
-    const URL = 'https://api.openweathermap.org/data/2.5/weather';
-    const fullUrl = `${URL}?q=${city}&appid=${API_KEY}&units=imperial`;
+let API_KEY ="461c2e996a5f19383d64c90a698fac0e";
 
-    try {
-        const response = await fetch(fullUrl);
-        if (!response.ok) {
-            throw new Error(`City not found: ${response.statusText}`);
-        }
-        return await response.json();
-    } catch (error) {
-        console.error(error.message);
-        alert("Failed to fetch weather data. Please try again.");
-    }
-};
+getWeatherData= (city) =>{
+      const URL = 'https://api.openweathermap.org/data/2.5/weather';
 
-const searchCity = async () => {
-    const city = document.getElementById("city-input").value.trim();
-    if (!city) {
-        alert("Please enter a city name.");
-        return;
-    }
+      const Full_Url = ${URL}?q=${city}&appid=${API_KEY}&units=imperial;
+      const weatherPromise = fetch(Full_Url);
+      console.log(city)
+      return weatherPromise.then((response) => {
+        return response.json()
+      })
+}
 
-    const weatherData = await getWeatherData(city);
-    if (weatherData) {
-        showWeatherData(weatherData);
-    }
-};
+function searchCity(){
+    const city= document.getElementById("city-input").value;
 
-const showWeatherData = (weatherData) => {
-    document.getElementById('city-name').innerText = weatherData.name || "N/A";
-    document.getElementById('weather-type').innerText = weatherData.weather[0]?.main || "N/A";
-    document.getElementById('temp').innerText = weatherData.main?.temp || "N/A";
-    document.getElementById('min-temp').innerText = weatherData.main?.temp_min || "N/A";
-    document.getElementById('max-temp').innerText = weatherData.main?.temp_max || "N/A";
-};
+    getWeatherData(city)
+    .then((response) =>{
+        showWeatherData(response)
+    })
+    .catch((err) =>{
+        console.log(err)
+    })
+}
+
+showWeatherData = (weatherData) =>{
+    document.getElementById('city-name').innerText = weatherData.name;
+    document.getElementById('weather-type').innerText = weatherData.weather[0].main;
+    document.getElementById('temp').innerText = weatherData.main.temp;
+    document.getElementById('min-temp').innerText = weatherData.main.temp_min;
+    document.getElementById('max-temp').innerText = weatherData.main.temp_max;
+}
